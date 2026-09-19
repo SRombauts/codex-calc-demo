@@ -1,0 +1,78 @@
+name: Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    name: clang-format
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Verify formatting
+        run: clang-format --dry-run --Werror src/*.c tests/*.c
+
+  cppcheck:
+    name: cppcheck
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Analyze
+        run: >-
+          cppcheck --error-exitcode=1 --enable=warning,style,performance,portability
+          --std=c17 --language=c --inline-suppr src tests
+
+  sanitizers:
+    name: ${{ matrix.sanitizer }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer: [ASan, UBSan]
+        include:
+          - sanitizer: ASan
+            option: CALC_ENABLE_ASAN
+          - sanitizer: UBSan
+            option: CALC_ENABLE_UBSAN
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -D${{ matrix.option }}=ON
+      - name: Build
+        run: cmake --build build --parallel
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  coverage:
+    name: Coverage (90% lines)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install gcovr
+        run: python3 -m pip install --disable-pip-version-check gcovr==7.2
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCALC_ENABLE_COVERAGE=ON
+      - name: Build and test
+        run: cmake --build build --parallel && ctest --test-dir build --output-on-failure
+      - name: Report coverage
+        run: |
+          mkdir -p coverage
+          gcovr --root . --filter 'src/' \
+            --fail-under-line 90 --xml-pretty --xml coverage/coverage.xml \
+            --html-details coverage/index.html --print-summary
+      - name: Publish job summary
+        if: always()
+        run: gcovr --root . --filter 'src/' --markdown >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: coverage-report
+          path: coverage/
+          if-no-files-found: ignore
+
