@@ -15,6 +15,7 @@ target_link_libraries(calc PRIVATE calc_core)
 calc_apply_project_options(calc)
 
 install(TARGETS calc RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES README.md LICENSE DESTINATION ${CMAKE_INSTALL_DATADIR}/doc/calc)
 
 if(BUILD_TESTING)
     add_library(unity STATIC tests/unity/unity.c)

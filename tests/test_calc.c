@@ -51,6 +51,7 @@ static void test_syntax_errors(void) {
     assert_error("", CALC_ERROR_SYNTAX);
     assert_error("   ", CALC_ERROR_SYNTAX);
     assert_error("1 +", CALC_ERROR_SYNTAX);
+    assert_error("1 *", CALC_ERROR_SYNTAX);
     assert_error("* 2", CALC_ERROR_SYNTAX);
     assert_error("()", CALC_ERROR_SYNTAX);
     assert_error("(1 + 2", CALC_ERROR_SYNTAX);
@@ -76,6 +77,7 @@ static void test_division_by_zero(void) {
 
 static void test_range_errors(void) {
     assert_error("1e9999", CALC_ERROR_RANGE);
+    assert_error("1e99999", CALC_ERROR_RANGE);
     assert_error("1e308 * 1e308", CALC_ERROR_RANGE);
     assert_error("1e-9999", CALC_ERROR_RANGE);
     assert_error("2.2250738585072014e-308 * 2.2250738585072014e-308", CALC_ERROR_RANGE);
@@ -100,6 +102,14 @@ static void test_depth_limit(void) {
     assert_error(expression, CALC_ERROR_SYNTAX);
 }
 
+static void test_parenthesis_depth_limit(void) {
+    char expression[132];
+    memset(expression, '(', 129U);
+    expression[129] = '1';
+    expression[130] = '\0';
+    assert_error(expression, CALC_ERROR_SYNTAX);
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_operator_precedence);
@@ -113,5 +123,6 @@ int main(void) {
     RUN_TEST(test_range_errors);
     RUN_TEST(test_invalid_argument_and_messages);
     RUN_TEST(test_depth_limit);
+    RUN_TEST(test_parenthesis_depth_limit);
     return UNITY_END();
 }
