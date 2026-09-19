@@ -6,7 +6,7 @@
       validate it through a reviewed pull request.
 - [x] Phase 3 — Implement the C17 evaluator and CLI with Unity/CTest unit and
       integration coverage; review, fix findings, and merge only when green.
-- [ ] Phase 4 — Harden edge cases and portability, complete documentation, run
+- [x] Phase 4 — Harden edge cases and portability, complete documentation, run
       full local/remote validation, review the final diff, and merge.
 - [ ] Phase 5 — Annotate and push `v0.1.0`; let GitHub Actions build release
       artifacts and publish the GitHub Release, then verify all deliverables.
