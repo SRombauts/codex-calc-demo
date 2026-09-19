@@ -55,4 +55,3 @@ function(calc_apply_project_options target)
         target_link_options(${target} PRIVATE --coverage)
     endif()
 endfunction()
-

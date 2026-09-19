@@ -6,7 +6,7 @@ include(CTest)
 include(GNUInstallDirs)
 include(cmake/ProjectOptions.cmake)
 
-add_executable(calc src/bootstrap.c)
+add_executable(calc src/calc.c)
 calc_apply_project_options(calc)
 
 install(TARGETS calc RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
@@ -25,4 +25,3 @@ if(NOT CPACK_PACKAGE_FILE_NAME)
 endif()
 set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
 include(CPack)
-
