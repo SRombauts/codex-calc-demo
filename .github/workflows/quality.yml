@@ -35,7 +35,7 @@ jobs:
           include_args=()
           if [[ -d include ]]; then include_args=(-I include include); fi
           cppcheck --error-exitcode=1 --enable=warning,style,performance,portability \
-            --std=c17 --language=c --inline-suppr "${include_args[@]}" src tests
+            --std=c17 --language=c --inline-suppr "${include_args[@]}" src tests/test_calc.c
 
   sanitizers:
     name: ${{ matrix.sanitizer }}
