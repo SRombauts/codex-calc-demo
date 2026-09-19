@@ -1,0 +1,14 @@
+/build*/
+/.cache/
+/.coverage/
+/coverage/
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
+*.user
+*.suo
+*.swp
+.DS_Store
+
