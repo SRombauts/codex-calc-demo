@@ -103,11 +103,31 @@ static void test_depth_limit(void) {
 }
 
 static void test_parenthesis_depth_limit(void) {
-    char expression[132];
-    memset(expression, '(', 129U);
-    expression[129] = '1';
-    expression[130] = '\0';
-    assert_error(expression, CALC_ERROR_SYNTAX);
+    char expression[(2U * 129U) + 2U];
+    size_t index = 0U;
+
+    for (size_t level = 0U; level < 128U; ++level) {
+        expression[index++] = '(';
+    }
+    expression[index++] = '1';
+    for (size_t level = 0U; level < 128U; ++level) {
+        expression[index++] = ')';
+    }
+    expression[index] = '\0';
+    assert_value(expression, 1.0);
+
+    index = 0U;
+    for (size_t level = 0U; level < 129U; ++level) {
+        expression[index++] = '(';
+    }
+    expression[index++] = '1';
+    for (size_t level = 0U; level < 129U; ++level) {
+        expression[index++] = ')';
+    }
+    expression[index] = '\0';
+    calc_result result = calc_evaluate(expression);
+    TEST_ASSERT_EQUAL_INT(CALC_ERROR_SYNTAX, result.status);
+    TEST_ASSERT_EQUAL_UINT64(129U, result.error_offset);
 }
 
 int main(void) {

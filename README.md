@@ -60,8 +60,9 @@ Overflow, underflow-to-zero, and division by positive or negative zero are error
 
 ## CLI contract
 
-Exactly one quoted expression is required. Successful results are printed with enough precision to
-round-trip a `double`. Diagnostics go to standard error and include a zero-based byte offset.
+Exactly one expression argument is required (shell quoting is needed only when it contains spaces or
+metacharacters). Successful results are printed with enough precision to round-trip a `double`.
+Evaluation diagnostics go to standard error and include a zero-based byte offset.
 
 | Exit code | Meaning |
 | ---: | --- |
