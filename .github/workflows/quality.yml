@@ -22,6 +22,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Install cppcheck
+        run: sudo apt-get update && sudo apt-get install --yes cppcheck
       - name: Analyze
         run: >-
           cppcheck --error-exitcode=1 --enable=warning,style,performance,portability
@@ -67,7 +69,10 @@ jobs:
             --html-details coverage/index.html --print-summary
       - name: Publish job summary
         if: always()
-        run: gcovr --root . --filter 'src/' --markdown >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo '```text' >> "$GITHUB_STEP_SUMMARY"
+          gcovr --root . --filter 'src/' --txt >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
