@@ -8,7 +8,7 @@
       integration coverage; review, fix findings, and merge only when green.
 - [x] Phase 4 — Harden edge cases and portability, complete documentation, run
       full local/remote validation, review the final diff, and merge.
-- [ ] Phase 5 — Annotate and push `v0.1.0`; let GitHub Actions build release
+- [x] Phase 5 — Annotate and push `v0.1.0`; let GitHub Actions build release
       artifacts and publish the GitHub Release, then verify all deliverables.
 
 ## Definition of done
