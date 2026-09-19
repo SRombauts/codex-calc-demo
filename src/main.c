@@ -7,7 +7,8 @@ enum {
     CALC_EXIT_USAGE = 2,
     CALC_EXIT_SYNTAX = 3,
     CALC_EXIT_DIVISION_BY_ZERO = 4,
-    CALC_EXIT_RANGE = 5
+    CALC_EXIT_RANGE = 5,
+    CALC_EXIT_IO = 6
 };
 
 static int exit_code_for(calc_status status) {
@@ -38,6 +39,9 @@ int main(int argc, char **argv) {
         return exit_code_for(result.status);
     }
 
-    printf("%.17g\n", result.value);
+    if (printf("%.17g\n", result.value) < 0 || fflush(stdout) == EOF) {
+        fprintf(stderr, "calc: output error\n");
+        return CALC_EXIT_IO;
+    }
     return CALC_EXIT_SUCCESS;
 }

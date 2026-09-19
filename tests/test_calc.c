@@ -58,6 +58,8 @@ static void test_syntax_errors(void) {
     assert_error("1 2", CALC_ERROR_SYNTAX);
     assert_error("hello", CALC_ERROR_SYNTAX);
     assert_error("1e+", CALC_ERROR_SYNTAX);
+    assert_error("0x1p2", CALC_ERROR_SYNTAX);
+    TEST_ASSERT_EQUAL_UINT64(6U, calc_evaluate("(1 + 2x").error_offset);
 }
 
 static void test_error_offsets(void) {
@@ -76,6 +78,8 @@ static void test_range_errors(void) {
     assert_error("1e9999", CALC_ERROR_RANGE);
     assert_error("1e308 * 1e308", CALC_ERROR_RANGE);
     assert_error("1e-9999", CALC_ERROR_RANGE);
+    assert_error("2.2250738585072014e-308 * 2.2250738585072014e-308", CALC_ERROR_RANGE);
+    assert_error("2.2250738585072014e-308 / 1e308", CALC_ERROR_RANGE);
 }
 
 static void test_invalid_argument_and_messages(void) {
