@@ -26,7 +26,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCPACK_PACKAGE_FILE_NAME=calc-${{ github.ref_name }}-${{ matrix.platform }}
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release "-DCPACK_PACKAGE_FILE_NAME:STRING=calc-${{ github.ref_name }}-${{ matrix.platform }}"
       - name: Build and test
         run: cmake --build build --config Release --parallel && ctest --test-dir build -C Release --output-on-failure
       - name: Package Unix
