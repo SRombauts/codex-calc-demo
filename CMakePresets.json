@@ -1,0 +1,77 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "dev",
+      "displayName": "Developer build",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/dev",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CALC_WARNINGS_AS_ERRORS": "ON",
+        "BUILD_TESTING": "ON"
+      }
+    },
+    {
+      "name": "asan",
+      "inherits": "dev",
+      "displayName": "AddressSanitizer build",
+      "binaryDir": "${sourceDir}/build/asan",
+      "cacheVariables": {
+        "CALC_ENABLE_ASAN": "ON"
+      }
+    },
+    {
+      "name": "ubsan",
+      "inherits": "dev",
+      "displayName": "UndefinedBehaviorSanitizer build",
+      "binaryDir": "${sourceDir}/build/ubsan",
+      "cacheVariables": {
+        "CALC_ENABLE_UBSAN": "ON"
+      }
+    },
+    {
+      "name": "coverage",
+      "inherits": "dev",
+      "displayName": "GCC coverage build",
+      "binaryDir": "${sourceDir}/build/coverage",
+      "cacheVariables": {
+        "CALC_ENABLE_COVERAGE": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "dev", "configurePreset": "dev" },
+    { "name": "asan", "configurePreset": "asan" },
+    { "name": "ubsan", "configurePreset": "ubsan" },
+    { "name": "coverage", "configurePreset": "coverage" }
+  ],
+  "testPresets": [
+    {
+      "name": "dev",
+      "configurePreset": "dev",
+      "output": { "outputOnFailure": true }
+    },
+    {
+      "name": "asan",
+      "configurePreset": "asan",
+      "output": { "outputOnFailure": true }
+    },
+    {
+      "name": "ubsan",
+      "configurePreset": "ubsan",
+      "output": { "outputOnFailure": true }
+    },
+    {
+      "name": "coverage",
+      "configurePreset": "coverage",
+      "output": { "outputOnFailure": true }
+    }
+  ]
+}
